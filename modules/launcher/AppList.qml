@@ -16,6 +16,7 @@ StyledListView {
 
     required property TextField search
     required property PersistentProperties visibilities
+    property var customCommand
 
     model: ScriptModel {
         id: model
@@ -39,10 +40,17 @@ StyledListView {
     state: {
         const text = search.text;
         const prefix = Config.launcher.actionPrefix;
+        root.CustomCommand = null;
         if (text.startsWith(prefix)) {
             for (const action of ["calc", "scheme", "variant"])
                 if (text.startsWith(`${prefix}${action} `))
                     return action;
+
+            for (const cmd of Config.launcher.commands)
+                if (cmd.submenu.length && text.startsWith(`${prefix}${cmd.name} `)) {
+                    root.customCommand = cmd;
+                    return "custom";
+                }
 
             return "actions";
         }
@@ -89,6 +97,14 @@ StyledListView {
             PropertyChanges {
                 model.values: M3Variants.query(search.text)
                 root.delegate: variantItem
+            }
+        },
+        State {
+            name: "custom"
+
+            PropertyChanges {
+                model.values: CustomCommands.query(root.CustomCommands.name, search.text)
+                root.delegate: actionItem
             }
         }
     ]

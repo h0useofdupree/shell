@@ -10,7 +10,7 @@ import QtQuick
 Searcher {
     id: root
 
-    readonly property list<Action> actions: [
+    readonly property list<Action> builtin: [
         Action {
             name: qsTr("Calculator")
             desc: qsTr("Do simple math equations (powered by Qalc)")
@@ -131,6 +131,36 @@ Searcher {
             }
         }
     ]
+
+    property list<Action> custom: buildCustomActions()
+    readonly property list<Action> actions: builtin.concat(custom)
+
+    Connections {
+        target: Config.launcher
+        function onCommandsChanged(): void {
+            custom = buildCustomActions();
+        }
+    }
+
+    function buildCustomActions(): list<Action> {
+        const out = [];
+        for (const c of Config.launcher.commands) {
+            const act = root.Action.createObject(root);
+            act.name = c.name;
+            act.desc = c.desc ?? "";
+            act.icon = c.icon ?? "";
+            if (c.submenu && c.submenu.length > 0) {
+                act.onClicked = list => root.autocomplete(list, c.name);
+            } else if (c.exec && c.exec.length > 0) {
+                act.onClicked = list => {
+                    list.visibilities.launcher = false;
+                    Quickshell.execDetached(c.exec);
+                };
+            }
+            out.push(act);
+        }
+        return out;
+    }
 
     function transformSearch(search: string): string {
         return search.slice(Config.launcher.actionPrefix.length);

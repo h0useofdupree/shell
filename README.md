@@ -288,7 +288,8 @@ All configuration options are in `~/.config/caelestia/shell.json`.
             "schemes": false,
             "variants": false,
             "wallpapers": false
-        }
+        },
+        "commands": []
     },
     "lock": {
         "recolourLogo": false
@@ -329,6 +330,35 @@ All configuration options are in `~/.config/caelestia/shell.json`.
 ```
 
 </details>
+
+### Custom launcher commands
+
+Additional commands can be exposed in the launcher through the `launcher.commands`
+array. Each entry may directly execute a command or provide a submenu of further
+options:
+
+```json
+{
+    "launcher": {
+        "commands": [
+            {
+                "name": "hello",
+                "exec": ["notify-send", "Hello"]
+            },
+            {
+                "name": "browser",
+                "submenu": [
+                    { "name": "Firefox", "exec": ["firefox"] },
+                    { "name": "Chromium", "exec": ["chromium"] }
+                ]
+            }
+        ]
+    }
+}
+```
+
+Typing `>hello` runs `notify-send` while `>browser` opens a submenu to choose a
+browser.
 
 ## FAQ
 

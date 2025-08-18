@@ -10,6 +10,7 @@ JsonObject {
     property bool vimKeybinds: false
     property UseFuzzy useFuzzy: UseFuzzy {}
     property Sizes sizes: Sizes {}
+    property list<Command> commands: []
 
     component UseFuzzy: JsonObject {
         property bool apps: false
@@ -24,5 +25,20 @@ JsonObject {
         property int itemHeight: 57
         property int wallpaperWidth: 280
         property int wallpaperHeight: 200
+    }
+
+    component Command: JsonObject {
+        property string name
+        property string desc: ""
+        property string icon: ""
+        property list<string> exec: []
+        property list<SubCommand> submenu: []
+    }
+
+    component SubCommand: JsonObject {
+        property string name
+        property string desc: ""
+        property string icon: ""
+        property list<string> exec: []
     }
 }
