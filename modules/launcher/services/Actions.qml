@@ -170,7 +170,7 @@ Searcher {
         list.search.text = `${Config.launcher.actionPrefix}${text} `;
     }
 
-    list: actions.filter(a => !a.disabled)
+    list: actions.filter(a => a && !a.disabled)
     useFuzzy: Config.launcher.useFuzzy.actions
 
     component Action: QtObject {
