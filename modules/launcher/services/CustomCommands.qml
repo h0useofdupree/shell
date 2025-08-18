@@ -9,8 +9,7 @@ import QtQuick
 QtObject {
     id: root
 
-    Searcher {
-        id: searcher
+    property Searcher searcher: Searcher {
         useFuzzy: Config.launcher.useFuzzy.actions
     }
 
