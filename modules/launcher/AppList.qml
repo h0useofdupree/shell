@@ -40,7 +40,7 @@ StyledListView {
     state: {
         const text = search.text;
         const prefix = Config.launcher.actionPrefix;
-        root.CustomCommand = null;
+        root.customCommand = null;
         if (text.startsWith(prefix)) {
             for (const action of ["calc", "scheme", "variant"])
                 if (text.startsWith(`${prefix}${action} `))
@@ -103,7 +103,7 @@ StyledListView {
             name: "custom"
 
             PropertyChanges {
-                model.values: CustomCommands.query(root.CustomCommands.name, search.text)
+                model.values: CustomCommands.query(root.customCommands.name, search.text)
                 root.delegate: actionItem
             }
         }
